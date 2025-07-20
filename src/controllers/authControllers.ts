@@ -9,16 +9,7 @@ import emailTransporter from "../email/emailTransporter";
 import dayjs from "dayjs";
 import resetPasswordSchema from "../zodSchemas/user/resetPasswordSchema";
 import crypto from "node:crypto";
-
-const userFields = [
-  "firstName",
-  "lastName",
-  "createdAt",
-  "isAdmin",
-  "email",
-  "__v",
-  "_id",
-];
+import getUserFields from "../utils/getUserFields";
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
@@ -40,7 +31,7 @@ export const register: RequestHandler = async (req, res, next) => {
 
     const token = user.generateJwt();
 
-    const editedUser = _.pick(user, userFields);
+    const editedUser = _.pick(user, getUserFields());
 
     res.status(201).send({
       success: true,
@@ -82,7 +73,7 @@ export const login: RequestHandler = async (req, res, next) => {
 
     const token = user.generateJwt();
 
-    const editedUser = _.pick(user, userFields);
+    const editedUser = _.pick(user, getUserFields());
 
     res.status(200).send({
       success: true,
@@ -192,7 +183,7 @@ export const resetPassword: RequestHandler<
 
     const jwt = user.generateJwt();
 
-    const editedUser = _.pick(user, userFields);
+    const editedUser = _.pick(user, getUserFields());
 
     res.status(200).send({
       success: true,
