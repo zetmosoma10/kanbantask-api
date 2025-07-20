@@ -6,6 +6,19 @@ import loginSchema from "../zodSchemas/user/loginSchema";
 import AppError from "../utils/AppError";
 import forgotPasswordSchema from "../zodSchemas/user/forgotPasswordSchema";
 import emailTransporter from "../email/emailTransporter";
+import dayjs from "dayjs";
+import resetPasswordSchema from "../zodSchemas/user/resetPasswordSchema";
+import crypto from "node:crypto";
+
+const userFields = [
+  "firstName",
+  "lastName",
+  "createdAt",
+  "isAdmin",
+  "email",
+  "__v",
+  "_id",
+];
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
@@ -27,14 +40,7 @@ export const register: RequestHandler = async (req, res, next) => {
 
     const token = user.generateJwt();
 
-    const editedUser = _.pick(user, [
-      "firstName",
-      "lastName",
-      "isAdmin",
-      "email",
-      "__v",
-      "_id",
-    ]);
+    const editedUser = _.pick(user, userFields);
 
     res.status(201).send({
       success: true,
@@ -76,14 +82,7 @@ export const login: RequestHandler = async (req, res, next) => {
 
     const token = user.generateJwt();
 
-    const editedUser = _.pick(user, [
-      "firstName",
-      "lastName",
-      "isAdmin",
-      "email",
-      "__v",
-      "_id",
-    ]);
+    const editedUser = _.pick(user, userFields);
 
     res.status(200).send({
       success: true,
@@ -120,10 +119,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
       emailTransporter({
         clientEmail: user.email,
         subject: "Password reset request",
-        content: `Hi ${user.firstName},\n 
-      We have received a password reset request, and to continue with the reset please click the link below. The link expires in 10 minutes.\n\n
-      ${url}
-      `,
+        content: `Hi ${user.firstName},\n We have received a password reset request, and    continue with the reset please click the link below. The link expires in 10 minutes.\n\n ${url}`,
       });
 
       res.status(200).send({
@@ -133,6 +129,76 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
     } catch (error) {
       console.log(error);
     }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword: RequestHandler<
+  {},
+  {},
+  {},
+  { token: string; id: string }
+> = async (req, res, next) => {
+  try {
+    // ****
+    const results = resetPasswordSchema.safeParse(req.body);
+    if (!results.success) {
+      next(new AppError("Invalid password", 400, results.error.format()));
+      return;
+    }
+
+    const user = await User.findById(req.query.id);
+    if (!user) {
+      next(new AppError("User not found", 404));
+      return;
+    }
+
+    const hashToken = crypto
+      .createHash("sha256")
+      .update(req.query.token)
+      .digest("hex");
+
+    if (user.passwordResetToken !== hashToken) {
+      user.passwordResetToken = undefined;
+      user.passwordResetTokenExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      next(
+        new AppError(
+          "Invalid token provided. Please request another token",
+          400
+        )
+      );
+      return;
+    }
+
+    if (dayjs().isAfter(user.passwordResetTokenExpire)) {
+      user.passwordResetToken = undefined;
+      user.passwordResetTokenExpire = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      next(
+        new AppError("Reset link has expired. Please request another one.", 400)
+      );
+      return;
+    }
+
+    user.password = results.data.password;
+    user.passwordChangedAt = dayjs().toDate();
+    user.passwordResetToken = undefined;
+    user.passwordResetTokenExpire = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    const jwt = user.generateJwt();
+
+    const editedUser = _.pick(user, userFields);
+
+    res.status(200).send({
+      success: true,
+      token: jwt,
+      results: editedUser,
+    });
   } catch (error) {
     next(error);
   }

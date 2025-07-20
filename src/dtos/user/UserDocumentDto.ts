@@ -9,7 +9,7 @@ interface UserDocumentDto extends Document {
   isAdmin: boolean;
   imageUrl?: string;
   imageId?: string;
-  passwordChangeAt?: Date;
+  passwordChangedAt?: Date;
   passwordResetToken?: string;
   passwordResetTokenExpire?: Date;
   generateJwt: () => string;

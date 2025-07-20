@@ -95,7 +95,7 @@ userSchema.methods.generateResetPasswordToken = function () {
     .update(token)
     .digest("hex");
 
-  this.passwordResetTokenExpire = dayjs().add(1, "minutes");
+  this.passwordResetTokenExpire = dayjs().add(10, "minutes");
 
   return token;
 };
