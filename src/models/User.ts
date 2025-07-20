@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     select: false,
-    minlength: [4, "password must have at least 3 characters"],
+    minlength: [4, "password must have at least 4 characters"],
     maxlength: [255, "password must not exceeds 255 characters"],
     required: [true, "password is required."],
   },
@@ -71,6 +71,14 @@ userSchema.methods.generateJwt = function (): string {
       expiresIn: "1d",
     }
   );
+};
+
+// * COMPARE PASSWORD
+userSchema.methods.isPasswordsTheSame = async function (
+  password: string,
+  hashPassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(password, hashPassword);
 };
 
 const User = mongoose.model<UserDocumentDto>("User", userSchema);

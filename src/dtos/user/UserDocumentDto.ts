@@ -13,6 +13,10 @@ interface UserDocumentDto extends Document {
   passwordResetToken?: string;
   passwordResetTokenExpire?: Date;
   generateJwt: () => string;
+  isPasswordsTheSame: (
+    password: string,
+    hashedPassword: string
+  ) => Promise<boolean>;
 }
 
 export default UserDocumentDto;
