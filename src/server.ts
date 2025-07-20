@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 dotenv.config();
 import app from "./app";
 import { env } from "process";
-
 import mongoose from "mongoose";
 
 async function main() {

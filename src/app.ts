@@ -1,7 +1,10 @@
 import express from "express";
+import authRouter from "./routes/authRoutes";
 
 const app = express();
 
-app.get("/", (req, res) => res.send("NODE + TYPESCRIPT"));
+app.use(express.json());
+
+app.use("/api/auth", authRouter);
 
 export default app;
