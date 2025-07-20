@@ -13,6 +13,7 @@ interface UserDocumentDto extends Document {
   passwordResetToken?: string;
   passwordResetTokenExpire?: Date;
   generateJwt: () => string;
+  generateResetPasswordToken: () => string;
   isPasswordsTheSame: (
     password: string,
     hashedPassword: string
