@@ -4,26 +4,20 @@ import { createUserDto } from "../dtos/user/UserDto";
 import userSchema from "../zodSchemas/user/userSchema";
 import _ from "lodash";
 import loginSchema from "../zodSchemas/user/loginSchema";
+import AppError from "../utils/AppError";
 
-export const register: RequestHandler = async (req, res) => {
+export const register: RequestHandler = async (req, res, next) => {
   try {
     const results = userSchema.safeParse(req.body);
     if (!results.success) {
-      res.status(400).send({
-        success: false,
-        message: "Invalid input(s)",
-        errors: results.error.format(),
-      });
+      next(new AppError("Invalid input(s)", 400, results.error.format()));
 
       return;
     }
 
     const userInDb = await User.findOne({ email: results.data?.email });
     if (userInDb) {
-      res.status(400).send({
-        success: false,
-        message: "User already registered.",
-      });
+      next(new AppError("User already registered.", 400));
 
       return;
     }
@@ -47,22 +41,15 @@ export const register: RequestHandler = async (req, res) => {
       token,
     });
   } catch (error) {
-    res.status(500).send({
-      success: false,
-      message: "server error",
-    });
+    next(new AppError("Server error. Try again later", 500));
   }
 };
 
-export const login: RequestHandler = async (req, res) => {
+export const login: RequestHandler = async (req, res, next) => {
   try {
     const results = loginSchema.safeParse(req.body);
     if (!results.success) {
-      res.status(400).send({
-        success: false,
-        message: "Invalid input(s)",
-        errors: results.error.format(),
-      });
+      next(new AppError("Invalid input(s)", 400, results.error.format()));
 
       return;
     }
@@ -71,10 +58,7 @@ export const login: RequestHandler = async (req, res) => {
       "+password"
     );
     if (!user) {
-      res.status(400).send({
-        success: false,
-        message: "Invalid email or password",
-      });
+      next(new AppError("Invalid email or password", 400));
 
       return;
     }
@@ -84,10 +68,7 @@ export const login: RequestHandler = async (req, res) => {
       user.password
     );
     if (!isPasswordsTheSame) {
-      res.status(400).send({
-        success: false,
-        message: "Invalid email or password",
-      });
+      next(new AppError("Invalid email or password", 400));
 
       return;
     }
@@ -109,9 +90,6 @@ export const login: RequestHandler = async (req, res) => {
       token,
     });
   } catch (error) {
-    res.status(500).send({
-      success: false,
-      message: "server error",
-    });
+    next(new AppError("Server error. Try again later", 500));
   }
 };
