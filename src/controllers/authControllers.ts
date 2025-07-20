@@ -13,6 +13,8 @@ export const register: RequestHandler = async (req, res) => {
         message: "Invalid input(s)",
         errors: results.error.format(),
       });
+
+      return;
     }
 
     const userInDb = await User.findOne({ email: results.data?.email });
@@ -21,6 +23,8 @@ export const register: RequestHandler = async (req, res) => {
         success: false,
         message: "User already registered.",
       });
+
+      return;
     }
 
     const user = await User.create(results.data);
@@ -30,6 +34,7 @@ export const register: RequestHandler = async (req, res) => {
       "lastName",
       "isAdmin",
       "email",
+      "password",
       "__v",
       "_id",
     ]);
