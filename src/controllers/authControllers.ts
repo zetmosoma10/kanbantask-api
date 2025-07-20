@@ -29,12 +29,13 @@ export const register: RequestHandler = async (req, res) => {
 
     const user = await User.create(results.data);
 
+    const token = user.generateJwt();
+
     const editedUser = _.pick(user, [
       "firstName",
       "lastName",
       "isAdmin",
       "email",
-      "password",
       "__v",
       "_id",
     ]);
@@ -42,6 +43,7 @@ export const register: RequestHandler = async (req, res) => {
     res.status(201).send({
       success: true,
       results: editedUser,
+      token,
     });
   } catch (error) {
     res.status(500).send({

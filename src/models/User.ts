@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { env } from "process";
+import UserDocumentDto from "./../dtos/user/UserDocumentDto";
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -40,6 +43,8 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  imageUrl: String,
+  imageId: String,
   passwordChangedAt: Date,
   passwordResetTokenExpire: Date,
   passwordResetToken: String,
@@ -55,6 +60,19 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-const User = mongoose.model("User", userSchema);
+// * GENERATE JWT
+userSchema.methods.generateJwt = function (): string {
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    env.KANBAN_JWT_SECRET!,
+    {
+      expiresIn: "1d",
+    }
+  );
+};
+
+const User = mongoose.model<UserDocumentDto>("User", userSchema);
 
 export default User;
