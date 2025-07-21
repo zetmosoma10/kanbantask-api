@@ -24,3 +24,17 @@ export const createBoard: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllBoards: RequestHandler = async (req, res, next) => {
+  try {
+    const boards = await Board.find({ createdBy: req.userId });
+
+    res.status(200).send({
+      success: true,
+      count: boards.length,
+      results: boards,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
