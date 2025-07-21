@@ -1,5 +1,5 @@
 import z from "zod";
-import objectId from "./objectIdSchema";
+import objectId from "../objectIdSchema";
 
 const taskSchema = z.object({
   title: z

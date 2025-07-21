@@ -1,8 +1,9 @@
 import { RequestHandler } from "express";
 import Task from "../models/Task";
-import taskSchema from "../zodSchemas/taskSchema";
+import taskSchema from "../zodSchemas/task/taskSchema";
 import AppError from "../utils/AppError";
 import Column from "../models/Column";
+import updateTaskSchema from "../zodSchemas/task/updateTaskSchema";
 
 export const createTask: RequestHandler = async (req, res, next) => {
   try {
@@ -56,6 +57,65 @@ export const getAllTasks: RequestHandler<{ board: string }> = async (
     });
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+};
+
+export const updateTask: RequestHandler<{ id: string }> = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    if (Object.keys(req.body).length === 0) {
+      next(new AppError("Please provide field(s) to update", 400));
+      return;
+    }
+
+    const results = updateTaskSchema.safeParse(req.body);
+    if (!results.success) {
+      next(new AppError("Invalid input(s)", 400, results.error.format()));
+      return;
+    }
+
+    const task = await Task.findByIdAndUpdate(
+      req.params.id,
+      { $set: results.data },
+      { new: true, runValidators: true }
+    );
+
+    if (!task) {
+      next(new AppError("Task not found", 404));
+      return;
+    }
+
+    res.status(200).send({
+      success: true,
+      results: task,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteTask: RequestHandler<{ id: string }> = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const task = await Task.findByIdAndDelete(req.params.id);
+
+    if (!task) {
+      next(new AppError("Task not found", 404));
+      return;
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Task deleted successfully",
+    });
+  } catch (error) {
     next(error);
   }
 };
