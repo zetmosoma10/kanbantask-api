@@ -38,3 +38,24 @@ export const getAllBoards: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteBoard: RequestHandler<{ id: string }> = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const board = await Board.findByIdAndDelete(req.params.id);
+    if (!board) {
+      next(new AppError("Board not found", 404));
+      return;
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Board deleted successfully.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
