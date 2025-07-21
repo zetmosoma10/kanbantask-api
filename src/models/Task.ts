@@ -54,3 +54,5 @@ taskSchema.index({ columnId: 1 });
 taskSchema.index({ boardId: 1, columnId: 1 });
 
 const Task = mongoose.model("Task", taskSchema);
+
+export default Task;
