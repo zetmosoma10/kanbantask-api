@@ -12,6 +12,7 @@ const columnSchema = new mongoose.Schema(
     boardId: {
       type: mongoose.Types.ObjectId,
       ref: "Board",
+      required: [true, "board id is required"],
     },
   },
   { timestamps: true }
