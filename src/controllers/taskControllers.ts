@@ -38,3 +38,23 @@ export const createTask: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllTasks: RequestHandler<{ boardId: string }> = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const tasks = await Task.find({ boardId: req.params.boardId }).populate(
+      "columnId"
+    );
+
+    res.status(200).send({
+      success: true,
+      count: tasks.length,
+      results: tasks,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
