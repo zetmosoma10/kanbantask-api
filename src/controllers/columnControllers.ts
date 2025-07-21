@@ -48,3 +48,24 @@ export const getAllColumns: RequestHandler<
     next(error);
   }
 };
+
+export const deleteColumn: RequestHandler<{ id: string }> = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const column = await Column.findByIdAndDelete(req.params.id);
+    if (!column) {
+      next(new AppError("Column not found", 404));
+      return;
+    }
+
+    res.status(200).send({
+      success: true,
+      message: "Column deleted successfully.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};

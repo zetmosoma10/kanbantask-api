@@ -1,9 +1,18 @@
 import { Router } from "express";
 import protectRoute from "../middlewares/protectRoute";
-import { createColumn, getAllColumns } from "../controllers/columnControllers";
+import {
+  createColumn,
+  deleteColumn,
+  getAllColumns,
+} from "../controllers/columnControllers";
 
 const columnRouter = Router();
 
-columnRouter.route("/").post(protectRoute, createColumn).get(getAllColumns);
+columnRouter
+  .route("/")
+  .post(protectRoute, createColumn)
+  .get(protectRoute, getAllColumns);
+
+columnRouter.route("/:id").delete(protectRoute, deleteColumn);
 
 export default columnRouter;
