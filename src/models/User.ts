@@ -4,7 +4,7 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
-import UserDocumentDto from "./../dtos/user/UserDocumentDto";
+import UserDocumentDto from "../dtos/UserDocumentDto";
 import dayjs from "dayjs";
 
 const userSchema = new mongoose.Schema(
