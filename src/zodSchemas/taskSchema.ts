@@ -10,8 +10,8 @@ const taskSchema = z.object({
     .string({ invalid_type_error: "description must be a string" })
     .min(5, "description must have at least 5 characters.")
     .max(300, "description must not exceeds 300 characters."),
-  boardId: objectId(),
-  columnId: objectId(),
+  board: objectId(),
+  column: objectId(),
   subtask: z
     .array(
       z.object({

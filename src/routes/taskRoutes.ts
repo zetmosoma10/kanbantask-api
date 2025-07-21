@@ -5,6 +5,6 @@ import protectRoute from "../middlewares/protectRoute";
 const taskRouter = Router();
 
 taskRouter.route("/").post(protectRoute, createTask);
-taskRouter.route("/:boardId").get(protectRoute, getAllTasks);
+taskRouter.route("/:board").get(protectRoute, getAllTasks);
 
 export default taskRouter;

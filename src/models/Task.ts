@@ -16,12 +16,12 @@ const taskSchema = new mongoose.Schema(
       maxlength: [300, "description must not exceeds 300 characters."],
       required: [true, "description is required"],
     },
-    columnId: {
+    column: {
       type: mongoose.Types.ObjectId,
       ref: "Column",
       required: [true, "column id is required"],
     },
-    boardId: {
+    board: {
       type: mongoose.Types.ObjectId,
       ref: "Board",
       required: [true, "board id is required"],
@@ -50,8 +50,8 @@ const taskSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-taskSchema.index({ columnId: 1 });
-taskSchema.index({ boardId: 1, columnId: 1 });
+taskSchema.index({ column: 1 });
+taskSchema.index({ board: 1, column: 1 });
 
 const Task = mongoose.model("Task", taskSchema);
 

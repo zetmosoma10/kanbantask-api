@@ -13,8 +13,8 @@ export const createTask: RequestHandler = async (req, res, next) => {
     }
 
     const column = await Column.findOne({
-      _id: results.data.columnId,
-      boardId: results.data.boardId,
+      _id: results.data.column,
+      boardId: results.data.board,
     });
     if (!column) {
       next(new AppError("Column not found.", 404));
@@ -25,8 +25,8 @@ export const createTask: RequestHandler = async (req, res, next) => {
       title: results.data.title,
       description: results.data.description,
       subtasks: results.data.subtask,
-      boardId: results.data.boardId,
-      columnId: results.data.columnId,
+      board: results.data.board,
+      column: results.data.column,
       createdBy: req.userId,
     });
 
@@ -39,14 +39,14 @@ export const createTask: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const getAllTasks: RequestHandler<{ boardId: string }> = async (
+export const getAllTasks: RequestHandler<{ board: string }> = async (
   req,
   res,
   next
 ) => {
   try {
-    const tasks = await Task.find({ boardId: req.params.boardId }).populate(
-      "columnId"
+    const tasks = await Task.find({ board: req.params.board }).populate(
+      "column"
     );
 
     res.status(200).send({
@@ -55,6 +55,7 @@ export const getAllTasks: RequestHandler<{ boardId: string }> = async (
       results: tasks,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
