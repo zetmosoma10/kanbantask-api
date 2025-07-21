@@ -5,7 +5,6 @@ const boardSchema = new mongoose.Schema(
     name: {
       type: String,
       trim: true,
-      lowercase: true,
       minlength: [3, "board name must be at least 3 characters."],
       maxlength: [50, "board name must not exceeds 50 characters."],
       required: [true, "board name is required."],
