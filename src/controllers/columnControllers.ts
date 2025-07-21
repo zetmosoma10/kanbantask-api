@@ -29,3 +29,22 @@ export const createColumn: RequestHandler<
     next(error);
   }
 };
+
+export const getAllColumns: RequestHandler<
+  any,
+  any,
+  any,
+  { boardId: string }
+> = async (req, res, next) => {
+  try {
+    const columns = await Column.find({ boardId: req.query.boardId });
+
+    res.status(200).send({
+      success: true,
+      counts: columns.length,
+      results: columns,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
