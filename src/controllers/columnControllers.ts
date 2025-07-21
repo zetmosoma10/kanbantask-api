@@ -69,3 +69,34 @@ export const deleteColumn: RequestHandler<{ id: string }> = async (
     next(error);
   }
 };
+
+export const updateColumn: RequestHandler<{ id: string }> = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const results = columnSchema.safeParse(req.body);
+    if (!results.success) {
+      next(new AppError("Invalid input", 400, results.error.format()));
+      return;
+    }
+
+    const column = await Column.findByIdAndUpdate(
+      req.params.id,
+      { $set: { name: results.data.name } },
+      { new: true, runValidators: true }
+    );
+    if (!column) {
+      next(new AppError("Column not found", 404));
+      return;
+    }
+
+    res.status(200).send({
+      success: true,
+      results: column,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

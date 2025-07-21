@@ -4,6 +4,7 @@ import {
   createColumn,
   deleteColumn,
   getAllColumns,
+  updateColumn,
 } from "../controllers/columnControllers";
 
 const columnRouter = Router();
@@ -13,6 +14,9 @@ columnRouter
   .post(protectRoute, createColumn)
   .get(protectRoute, getAllColumns);
 
-columnRouter.route("/:id").delete(protectRoute, deleteColumn);
+columnRouter
+  .route("/:id")
+  .delete(protectRoute, deleteColumn)
+  .patch(protectRoute, updateColumn);
 
 export default columnRouter;
