@@ -1,4 +1,9 @@
 import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import compression from "compression";
+import rateLimit from "express-rate-limit";
+import sanitize from "express-mongo-sanitize";
 import authRouter from "./routes/authRoutes";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import userRouter from "./routes/userRoutes";
@@ -8,6 +13,18 @@ import taskRouter from "./routes/taskRoutes";
 
 const app = express();
 
+const limit = rateLimit({
+  windowMs: 15 * 60 * 1000, // * 15 minutes
+  max: 100, // * limit each IP to 100 requests per windowMs // 100 requests
+  message: "Too many requests from this IP, please try again after an hour",
+});
+
+app.set("trust proxy", 1);
+app.use(cors());
+app.use(limit);
+app.use(helmet());
+app.use(sanitize());
+app.use(compression());
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
