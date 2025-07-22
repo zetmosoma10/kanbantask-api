@@ -41,26 +41,59 @@ export const createTask: RequestHandler = async (req, res, next) => {
   }
 };
 
-// export const getAllTasks: RequestHandler<{ board: string }> = async (
-//   req,
-//   res,
-//   next
-// ) => {
-//   try {
-//     const tasks = await Task.find({ board: req.params.board }).populate(
-//       "column"
-//     );
+export const getAllTasks: RequestHandler<{ board: string }> = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const tasks = await Task.aggregate([
+      { $match: { board: new mongoose.Types.ObjectId(req.params.board) } },
+      {
+        $lookup: {
+          from: "columns",
+          localField: "column",
+          foreignField: "_id",
+          as: "columnDetails",
+        },
+      },
+      { $unwind: "$columnDetails" },
+      {
+        $group: {
+          _id: "$columnDetails.name",
+          count: { $sum: 1 },
+          tasks: {
+            $push: {
+              title: "$title",
+              description: "$description",
+              subtasks: "$subtasks",
+              columnId: "$column",
+              boardId: "$board",
+              createdAt: "$columnDetails.createdAt",
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          status: "$_id",
+          count: "$count",
+          tasks: "$tasks",
+        },
+      },
+      { $sort: { "tasks.createdAt": 1 } },
+    ]);
 
-//     res.status(200).send({
-//       success: true,
-//       count: tasks.length,
-//       results: tasks,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     next(error);
-//   }
-// };
+    res.status(200).send({
+      success: true,
+      results: tasks,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
 export const updateTask: RequestHandler<{ id: string }> = async (
   req,
@@ -117,60 +150,6 @@ export const deleteTask: RequestHandler<{ id: string }> = async (
       message: "Task deleted successfully",
     });
   } catch (error) {
-    next(error);
-  }
-};
-
-export const getAllTasks: RequestHandler<{ board: string }> = async (
-  req,
-  res,
-  next
-) => {
-  try {
-    const tasks = await Task.aggregate([
-      { $match: { board: new mongoose.Types.ObjectId(req.params.board) } },
-      {
-        $lookup: {
-          from: "columns",
-          localField: "column",
-          foreignField: "_id",
-          as: "columnDetails",
-        },
-      },
-      { $unwind: "$columnDetails" },
-      {
-        $group: {
-          _id: "$columnDetails.name",
-          count: { $sum: 1 },
-          tasks: {
-            $push: {
-              title: "$title",
-              description: "$description",
-              subtasks: "$subtasks",
-              columnId: "$column",
-              boardId: "$board",
-              createdAt: "$columnDetails.createdAt",
-            },
-          },
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          status: "$_id",
-          count: "$count",
-          tasks: "$tasks",
-        },
-      },
-      { $sort: { "tasks.createdAt": 1 } },
-    ]);
-
-    res.status(200).send({
-      success: true,
-      results: tasks,
-    });
-  } catch (error) {
-    console.log(error);
     next(error);
   }
 };
