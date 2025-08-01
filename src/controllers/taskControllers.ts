@@ -64,6 +64,7 @@ export const getAllTasks: RequestHandler<{ board: string }> = async (
           count: { $sum: 1 },
           tasks: {
             $push: {
+              _id: "$_id",
               title: "$title",
               description: "$description",
               subtasks: "$subtasks",

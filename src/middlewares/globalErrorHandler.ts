@@ -63,6 +63,7 @@ const handleTokenExpireError = (err: any) => {
   return new AppError("Session expired. Please login again.", 401);
 };
 
+// ? MIDDLEWARE
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
   // ****
   error.status = error.status || 500;

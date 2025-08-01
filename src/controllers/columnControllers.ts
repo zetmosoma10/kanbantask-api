@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import Column from "../models/Column";
 import columnSchema from "../zodSchemas/columnSchema";
 import AppError from "../utils/AppError";
+import mongoose from "mongoose";
 
 export const createColumn: RequestHandler<
   any,
@@ -37,11 +38,33 @@ export const getAllColumns: RequestHandler<
   { boardId: string }
 > = async (req, res, next) => {
   try {
-    const columns = await Column.find({ boardId: req.query.boardId });
+    const columns = await Column.aggregate([
+      { $match: { boardId: new mongoose.Types.ObjectId(req.query.boardId) } },
+      {
+        $lookup: {
+          from: "tasks",
+          localField: "_id",
+          foreignField: "column",
+          as: "tasks",
+        },
+      },
+      { $unwind: { path: "$tasks", preserveNullAndEmptyArrays: true } },
+      {
+        $group: {
+          _id: "$_id",
+          count: { $sum: 1 },
+          name: { $first: "$name" },
+          boardId: { $first: "$boardId" },
+          createdAt: { $first: "$createdAt" },
+          tasks: { $push: "$tasks" },
+        },
+      },
+      { $sort: { createdAt: 1 } },
+    ]);
 
     res.status(200).send({
       success: true,
-      counts: columns.length,
+      count: columns.length,
       results: columns,
     });
   } catch (error) {

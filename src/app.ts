@@ -20,12 +20,12 @@ const limit = rateLimit({
 });
 
 app.set("trust proxy", 1);
+app.use(express.json());
 app.use(cors());
 app.use(limit);
 app.use(helmet());
-app.use(sanitize());
+// app.use(sanitize());
 app.use(compression());
-app.use(express.json());
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
