@@ -12,7 +12,7 @@ const taskSchema = z.object({
     .max(300, "description must not exceeds 300 characters."),
   board: objectId(),
   column: objectId(),
-  subtask: z
+  subtasks: z
     .array(
       z.object({
         title: z

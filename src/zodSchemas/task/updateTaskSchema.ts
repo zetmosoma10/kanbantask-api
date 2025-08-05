@@ -4,7 +4,7 @@ const updateTaskSchema = taskSchema
   .pick({
     title: true,
     description: true,
-    subtask: true,
+    subtasks: true,
   })
   .partial();
 
