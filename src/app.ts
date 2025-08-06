@@ -32,6 +32,12 @@ app.use("/api/user", userRouter);
 app.use("/api/tasks", taskRouter);
 app.use("/api/boards", boardRouter);
 app.use("/api/columns", columnRouter);
+app.use((req, res) => {
+  res.status(400).send({
+    success: false,
+    message: `Invalid path: ${req.path}`,
+  });
+});
 app.use(globalErrorHandler);
 
 export default app;
