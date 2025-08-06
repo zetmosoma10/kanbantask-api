@@ -2,6 +2,9 @@ import { RequestHandler } from "express";
 import Board from "../models/Board";
 import boardSchema from "../zodSchemas/boardSchema";
 import AppError from "../utils/AppError";
+import mongoose from "mongoose";
+import Column from "../models/Column";
+import Task from "../models/Task";
 
 export const createBoard: RequestHandler = async (req, res, next) => {
   try {
@@ -44,18 +47,30 @@ export const deleteBoard: RequestHandler<{ id: string }> = async (
   res,
   next
 ) => {
+  const session = await mongoose.startSession();
+
   try {
-    const board = await Board.findByIdAndDelete(req.params.id);
+    session.startTransaction();
+
+    const board = await Board.findByIdAndDelete(req.params.id, { session });
     if (!board) {
       next(new AppError("Board not found", 404));
       return;
     }
+
+    await Column.deleteMany({ boardId: board._id }, { session });
+    await Task.deleteMany({ board: board._id });
+
+    await session.commitTransaction();
 
     res.status(200).send({
       success: true,
       message: "Board deleted successfully.",
     });
   } catch (error) {
+    await session.abortTransaction();
     next(error);
+  } finally {
+    await session.endSession();
   }
 };

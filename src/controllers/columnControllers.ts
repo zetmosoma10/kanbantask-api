@@ -3,6 +3,7 @@ import Column from "../models/Column";
 import columnSchema from "../zodSchemas/columnSchema";
 import AppError from "../utils/AppError";
 import mongoose from "mongoose";
+import Task from "../models/Task";
 
 export const createColumn: RequestHandler<
   any,
@@ -77,19 +78,30 @@ export const deleteColumn: RequestHandler<{ id: string }> = async (
   res,
   next
 ) => {
+  const session = await mongoose.startSession();
+
   try {
-    const column = await Column.findByIdAndDelete(req.params.id);
+    session.startTransaction();
+
+    const column = await Column.findByIdAndDelete(req.params.id, { session });
     if (!column) {
       next(new AppError("Column not found", 404));
       return;
     }
+
+    const tasks = await Task.deleteMany({ column: column._id }, { session });
+
+    await session.commitTransaction();
 
     res.status(200).send({
       success: true,
       message: "Column deleted successfully.",
     });
   } catch (error) {
+    await session.abortTransaction();
     next(error);
+  } finally {
+    await session.endSession();
   }
 };
 
