@@ -6,6 +6,7 @@ import {
   getAllColumns,
   updateColumn,
 } from "../controllers/columnControllers";
+import validateObjectId from "../middlewares/validateObjectId";
 
 const columnRouter = Router();
 
@@ -16,7 +17,7 @@ columnRouter
 
 columnRouter
   .route("/:id")
-  .delete(protectRoute, deleteColumn)
-  .patch(protectRoute, updateColumn);
+  .delete(protectRoute, validateObjectId, deleteColumn)
+  .patch(protectRoute, validateObjectId, updateColumn);
 
 export default columnRouter;

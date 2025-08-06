@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import resetPasswordSchema from "../zodSchemas/user/resetPasswordSchema";
 import crypto from "node:crypto";
 import getUserFields from "../utils/getUserFields";
+import mongoose from "mongoose";
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
@@ -136,6 +137,11 @@ export const resetPassword: RequestHandler<
     const results = resetPasswordSchema.safeParse(req.body);
     if (!results.success) {
       next(new AppError("Invalid password", 400, results.error.format()));
+      return;
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(req.query.id)) {
+      next(new AppError(`Invalid objectId: ${req.query.id}`, 400));
       return;
     }
 
