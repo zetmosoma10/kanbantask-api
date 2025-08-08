@@ -14,6 +14,11 @@ const columnSchema = new mongoose.Schema(
       ref: "Board",
       required: [true, "board id is required"],
     },
+    createdBy: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: [true, "user id is required"],
+    },
   },
   { timestamps: true }
 );

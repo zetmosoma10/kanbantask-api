@@ -21,6 +21,7 @@ export const createColumn: RequestHandler<
     const column = await Column.create({
       name: results.data.name,
       boardId: req.query.boardId,
+      createdBy: req.userId,
     });
 
     res.status(201).send({
