@@ -7,10 +7,12 @@ const validateObjectId: RequestHandler<{ id: string }> = async (
   res,
   next
 ) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.id))
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     next(new AppError(`Invalid object id: ${req.params.id}`, 400));
+    return
+  }
 
-  return;
+  next()
 };
 
 export default validateObjectId;

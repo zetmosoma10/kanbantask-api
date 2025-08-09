@@ -20,7 +20,7 @@ const emailTransporter = async (options: EmailOptionsDto) => {
     },
     to: options.clientEmail,
     subject: options.subject,
-    text: options.content,
+    html: options.htmlContent,
   };
 
   transporter.sendMail(mailOptions);

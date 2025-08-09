@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import mongoose from "mongoose";
 import User from "../models/User";
 import userSchema from "../zodSchemas/user/userSchema";
 import _ from "lodash";
@@ -10,7 +11,7 @@ import dayjs from "dayjs";
 import resetPasswordSchema from "../zodSchemas/user/resetPasswordSchema";
 import crypto from "node:crypto";
 import getUserFields from "../utils/getUserFields";
-import mongoose from "mongoose";
+import emailTemplate from "../email/emailTemplate"
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
@@ -103,15 +104,14 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
     const token = user.generateResetPasswordToken();
     await user.save({ validateBeforeSave: false });
 
-    const url = `${req.protocol}://${req.get(
-      "host"
-    )}/reset-password?token=${token}&id=${user._id}`;
+    const url = `${process.env.KANBAN_CLIENT}/reset-password?token=${token}&id=${user._id}`;
 
+    // * SEND EMAIL
     try {
       emailTransporter({
         clientEmail: user.email,
         subject: "Password reset request",
-        content: `Hi ${user.firstName},\n We have received a password reset request, and    continue with the reset please click the link below. The link expires in 10 minutes.\n\n ${url}`,
+        htmlContent: emailTemplate(user,url)
       });
 
       res.status(200).send({
