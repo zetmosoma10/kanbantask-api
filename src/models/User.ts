@@ -70,6 +70,8 @@ userSchema.methods.generateJwt = function (): string {
   return jwt.sign(
     {
       _id: this._id,
+      firstName: this.firstName,
+      lastName: this.lastName,
     },
     env.KANBAN_JWT_SECRET!,
     {
