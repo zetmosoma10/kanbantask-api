@@ -11,6 +11,12 @@ export const createColumn: RequestHandler<
   any,
   { boardId: string }
 > = async (req, res, next) => {
+  // ****
+  if (!mongoose.Types.ObjectId.isValid(req.query.boardId)) {
+    next(new AppError("Board not found", 404));
+    return;
+  }
+
   try {
     const results = columnSchema.safeParse(req.body);
     if (!results.success) {
@@ -39,6 +45,12 @@ export const getAllColumns: RequestHandler<
   any,
   { boardId: string }
 > = async (req, res, next) => {
+  // ****
+  if (!mongoose.Types.ObjectId.isValid(req.query.boardId)) {
+    next(new AppError("Board not found", 404));
+    return;
+  }
+
   try {
     const columns = await Column.aggregate([
       { $match: { boardId: new mongoose.Types.ObjectId(req.query.boardId) } },
