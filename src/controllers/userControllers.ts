@@ -123,3 +123,26 @@ export const uploadProfileImage: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const deleteProfileImage: RequestHandler = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      next(new AppError("User not found", 404));
+      return;
+    }
+
+    await cloudinary.uploader.destroy(user.imageId!);
+
+    user.imageId = undefined;
+    user.imageUrl = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    res.status(200).send({
+      success: true,
+      results: user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   deleteProfile,
+  deleteProfileImage,
   getLoggedInUser,
   uploadProfileImage,
 } from "../controllers/userControllers";
@@ -14,5 +15,6 @@ userRouter.route("/delete-account").post(protectRoute, deleteProfile);
 userRouter
   .route("/upload-image")
   .patch(protectRoute, uploadMiddleware, uploadProfileImage);
+userRouter.route("/delete-image").delete(protectRoute, deleteProfileImage);
 
 export default userRouter;
