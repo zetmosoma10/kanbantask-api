@@ -11,7 +11,7 @@ import dayjs from "dayjs";
 import resetPasswordSchema from "../zodSchemas/user/resetPasswordSchema";
 import crypto from "node:crypto";
 import getUserFields from "../utils/getUserFields";
-import emailTemplate from "../email/emailTemplate"
+import emailTemplate from "../email/emailTemplate";
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
@@ -111,7 +111,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
       emailTransporter({
         clientEmail: user.email,
         subject: "Password reset request",
-        htmlContent: emailTemplate(user,url)
+        htmlContent: emailTemplate(user, url),
       });
 
       res.status(200).send({
