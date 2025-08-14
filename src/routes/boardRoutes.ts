@@ -3,6 +3,7 @@ import {
   createBoard,
   deleteBoard,
   getAllBoards,
+  editBoard,
 } from "../controllers/boardControllers";
 import protectRoute from "../middlewares/protectRoute";
 import validateObjectId from "../middlewares/validateObjectId";
@@ -14,6 +15,9 @@ boardRouter
   .post(protectRoute, createBoard)
   .get(protectRoute, getAllBoards);
 
-boardRouter.route("/:id").delete(protectRoute, validateObjectId, deleteBoard);
+boardRouter
+  .route("/:id")
+  .patch(protectRoute, validateObjectId, editBoard)
+  .delete(protectRoute, validateObjectId, deleteBoard);
 
 export default boardRouter;

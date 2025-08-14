@@ -42,6 +42,33 @@ export const getAllBoards: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const editBoard: RequestHandler<{ id: string }> = async (
+  req,
+  res,
+  next
+) => {
+  const results = boardSchema.safeParse(req.body);
+  if (!results.success) {
+    next(new AppError("Invalid input", 400, results.error.format()));
+    return;
+  }
+
+  try {
+    const board = await Board.findByIdAndUpdate(req.params.id, results.data);
+    if (!board) {
+      next(new AppError("Board not found", 404));
+      return;
+    }
+
+    res.status(200).send({
+      success: true,
+      results: board,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteBoard: RequestHandler<{ id: string }> = async (
   req,
   res,

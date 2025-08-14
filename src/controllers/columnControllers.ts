@@ -4,6 +4,7 @@ import columnSchema from "../zodSchemas/columnSchema";
 import AppError from "../utils/AppError";
 import mongoose from "mongoose";
 import Task from "../models/Task";
+import Board from "../models/Board";
 
 export const createColumn: RequestHandler<
   any,
@@ -13,6 +14,12 @@ export const createColumn: RequestHandler<
 > = async (req, res, next) => {
   // ****
   if (!mongoose.Types.ObjectId.isValid(req.query.boardId)) {
+    next(new AppError("Board not found", 404));
+    return;
+  }
+
+  const board = await Board.findById(req.query.boardId);
+  if (!board) {
     next(new AppError("Board not found", 404));
     return;
   }
@@ -63,6 +70,7 @@ export const getAllColumns: RequestHandler<
         },
       },
       { $unwind: { path: "$tasks", preserveNullAndEmptyArrays: true } },
+      { $sort: { "tasks.createdAt": -1 } },
       {
         $group: {
           _id: "$_id",
@@ -115,36 +123,5 @@ export const deleteColumn: RequestHandler<{ id: string }> = async (
     next(error);
   } finally {
     await session.endSession();
-  }
-};
-
-export const updateColumn: RequestHandler<{ id: string }> = async (
-  req,
-  res,
-  next
-) => {
-  try {
-    const results = columnSchema.safeParse(req.body);
-    if (!results.success) {
-      next(new AppError("Invalid input", 400, results.error.format()));
-      return;
-    }
-
-    const column = await Column.findByIdAndUpdate(
-      req.params.id,
-      { $set: { name: results.data.name } },
-      { new: true, runValidators: true }
-    );
-    if (!column) {
-      next(new AppError("Column not found", 404));
-      return;
-    }
-
-    res.status(200).send({
-      success: true,
-      results: column,
-    });
-  } catch (error) {
-    next(error);
   }
 };
