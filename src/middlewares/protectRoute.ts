@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { env } from "node:process";
-import JwtPayloadDto from "../dtos/jwtPayloadDto";
+import JwtPayloadType from "../types/jwtPayloadType";
 import AppError from "../utils/AppError";
 
 const protectRoute: RequestHandler = async (req, res, next) => {
@@ -12,12 +12,12 @@ const protectRoute: RequestHandler = async (req, res, next) => {
       return;
     }
 
-    let decodedJwt = {} as JwtPayloadDto;
+    let decodedJwt = {} as JwtPayloadType;
     try {
       decodedJwt = jwt.verify(
         token,
         env.KANBAN_JWT_SECRET as string
-      ) as JwtPayloadDto;
+      ) as JwtPayloadType;
     } catch (error) {
       next(error);
       return;

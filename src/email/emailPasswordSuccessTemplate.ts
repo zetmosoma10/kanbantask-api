@@ -1,4 +1,6 @@
-function emailPasswordSuccessTemplate(user) {
+import UserDocumentType from "../types/UserDocumentType";
+
+function emailPasswordSuccessTemplate(user: UserDocumentType) {
   return `
         <html>
             <body style="font-family: Arial, sans-serif; color: #333;">

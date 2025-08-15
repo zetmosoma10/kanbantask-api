@@ -1,4 +1,6 @@
-function emailPasswordResetTemplate(user, link) {
+import UserDocumentType from "../types/UserDocumentType";
+
+function emailPasswordResetTemplate(user: UserDocumentType, link: string) {
   return `
   <html>
     <body style="font-family: Arial, sans-serif; color: #333;">

@@ -1,6 +1,6 @@
 import { Types, Document } from "mongoose";
 
-interface UserDocumentDto extends Document {
+interface UserDocumentType extends Document {
   _id: Types.ObjectId;
   firstName: string;
   lastName: string;
@@ -20,4 +20,4 @@ interface UserDocumentDto extends Document {
   ) => Promise<boolean>;
 }
 
-export default UserDocumentDto;
+export default UserDocumentType;

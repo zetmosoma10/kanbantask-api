@@ -4,7 +4,7 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "node:crypto";
-import UserDocumentDto from "../dtos/UserDocumentDto";
+import UserDocumentType from "../types/UserDocumentType";
 import dayjs from "dayjs";
 
 const userSchema = new mongoose.Schema(
@@ -102,6 +102,6 @@ userSchema.methods.generateResetPasswordToken = function () {
   return token;
 };
 
-const User = mongoose.model<UserDocumentDto>("User", userSchema);
+const User = mongoose.model<UserDocumentType>("User", userSchema);
 
 export default User;

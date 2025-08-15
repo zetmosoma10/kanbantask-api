@@ -1,9 +1,9 @@
 import { Types } from "mongoose";
 
-type JwtPayloadDto = {
+type JwtPayloadType = {
   _id: Types.ObjectId;
   iat: number;
   exp: number;
 };
 
-export default JwtPayloadDto;
+export default JwtPayloadType;

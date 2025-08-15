@@ -1,7 +1,7 @@
-type EmailOptionsDto = {
+type EmailOptionsType = {
   clientEmail: string;
   subject: string;
   htmlContent: string;
 };
 
-export default EmailOptionsDto;
+export default EmailOptionsType;

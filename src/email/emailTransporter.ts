@@ -1,9 +1,9 @@
 import nodemailer from "nodemailer";
 import type SMTPTransport from "nodemailer/lib/smtp-transport";
-import EmailOptionsDto from "../dtos/emailOptionsDto";
+import EmailOptionsType from "../types/emailOptionsType";
 import { env } from "node:process";
 
-const emailTransporter = async (options: EmailOptionsDto) => {
+const emailTransporter = async (options: EmailOptionsType) => {
   const transporter = nodemailer.createTransport({
     service: env.KANBAN_EMAIL_SERVICES,
     host: env.KANBAN_EMAIL_HOST,
