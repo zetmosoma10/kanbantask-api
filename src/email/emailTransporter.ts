@@ -5,8 +5,10 @@ import { env } from "node:process";
 
 const emailTransporter = async (options: EmailOptionsDto) => {
   const transporter = nodemailer.createTransport({
+    service: env.KANBAN_EMAIL_SERVICES,
     host: env.KANBAN_EMAIL_HOST,
     port: env.KANBAN_EMAIL_PORT,
+    secure: false,
     auth: {
       user: env.KANBAN_EMAIL_USER,
       pass: env.KANBAN_EMAIL_PASS,
@@ -15,8 +17,8 @@ const emailTransporter = async (options: EmailOptionsDto) => {
 
   const mailOptions = {
     from: {
-      name: "kanban<support>",
-      address: env.MY_EMAIL!,
+      name: "kanban",
+      address: env.KANBAN_EMAIL_USER!,
     },
     to: options.clientEmail,
     subject: options.subject,

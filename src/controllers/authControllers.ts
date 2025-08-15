@@ -11,7 +11,8 @@ import dayjs from "dayjs";
 import resetPasswordSchema from "../zodSchemas/user/resetPasswordSchema";
 import crypto from "node:crypto";
 import getUserFields from "../utils/getUserFields";
-import emailTemplate from "../email/emailTemplate";
+import emailPasswordResetTemplate from "../email/emailPasswordResetTemplate";
+import emailPasswordSuccessTemplate from "../email/emailPasswordSuccessTemplate";
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
@@ -111,7 +112,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
       emailTransporter({
         clientEmail: user.email,
         subject: "Password reset request",
-        htmlContent: emailTemplate(user, url),
+        htmlContent: emailPasswordResetTemplate(user, url),
       });
 
       res.status(200).send({
@@ -186,6 +187,17 @@ export const resetPassword: RequestHandler<
     user.passwordResetToken = undefined;
     user.passwordResetTokenExpire = undefined;
     await user.save({ validateBeforeSave: false });
+
+    // * SEND CONFIRMATION EMAIL
+    try {
+      emailTransporter({
+        clientEmail: user.email,
+        subject: "Reset password success",
+        htmlContent: emailPasswordSuccessTemplate(user),
+      });
+    } catch (error) {
+      console.log("error sending email", error);
+    }
 
     const jwt = user.generateJwt();
 
