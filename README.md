@@ -84,27 +84,23 @@ npm start
 
 ## 📡 API Endpoints
 
-| Method | Endpoint                  | Description       | Auth Required |
-| ------ | ------------------------- | ----------------- | ------------- |
-| POST   | /api/auth/register        | Register new user | No            |
-| POST   | /api/auth/login           | Login user        | No            |
-| POST   | /api/auth/forgot-password | forgot password   | No            |
-| PATCH  | /api/auth/reset-password  | reset password    | No            |
-
-| GET | /api/user/me | Get Login User | Yes |
-| POST | /api/user/delete-account | Delete User Account | Yes |
-| PATCH | /api/user/upload-image | Upload User Image | Yes |
-| DELETE | /api/user/delete-image | Delete User Image | Yes |
-
-| POST | /api/boards | Create User Board | Yes |
-| GET | /api/boards | Get all User Boards | Yes |
-| PATCH | /api/boards/:id | Update Board | Yes |
-| DELETE | /api/boards/:id | Delete Board | Yes |
-
-| POST | /api/columns | Create Column | Yes |
-| GET | /api/columns | Get all Use Columns | Yes |
-| DELETE | /api/columns/:id | Delete Column | Yes |
-
-| POST | /api/tasks | Create task | Yes |
-| PATCH | /api/tasks/:id | Update task | Yes |
-| DELETE | /api/tasks/:id | Delete task | Yes |
+| Method | Endpoint                  | Description         | Auth Required |
+| ------ | ------------------------- | ------------------- | ------------- |
+| POST   | /api/auth/register        | Register new user   | No            |
+| POST   | /api/auth/login           | Login user          | No            |
+| POST   | /api/auth/forgot-password | forgot password     | No            |
+| PATCH  | /api/auth/reset-password  | reset password      | No            |
+| GET    | /api/user/me              | Get Login User      | Yes           |
+| POST   | /api/user/delete-account  | Delete User Account | Yes           |
+| PATCH  | /api/user/upload-image    | Upload User Image   | Yes           |
+| DELETE | /api/user/delete-image    | Delete User Image   | Yes           |
+| POST   | /api/boards               | Create User Board   | Yes           |
+| GET    | /api/boards               | Get all User Boards | Yes           |
+| PATCH  | /api/boards/:id           | Update Board        | Yes           |
+| DELETE | /api/boards/:id           | Delete Board        | Yes           |
+| POST   | /api/columns              | Create Column       | Yes           |
+| GET    | /api/columns              | Get all Use Columns | Yes           |
+| DELETE | /api/columns/:id          | Delete Column       | Yes           |
+| POST   | /api/tasks                | Create task         | Yes           |
+| PATCH  | /api/tasks/:id            | Update task         | Yes           |
+| DELETE | /api/tasks/:id            | Delete task         | Yes           |
