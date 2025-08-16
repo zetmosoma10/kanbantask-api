@@ -3,7 +3,6 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 import rateLimit from "express-rate-limit";
-import sanitize from "express-mongo-sanitize";
 import authRouter from "./routes/authRoutes";
 import globalErrorHandler from "./middlewares/globalErrorHandler";
 import userRouter from "./routes/userRoutes";
@@ -30,7 +29,6 @@ app.use(
 );
 app.use(limit);
 app.use(helmet());
-// app.use(sanitize());
 app.use(compression());
 
 app.use("/api/auth", authRouter);
