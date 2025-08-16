@@ -4,13 +4,13 @@ A RESTful API built with **Node**, **Typescript**, **Express** and **MongoDB** f
 
 ## TABLE OF CONTENT
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Environment Variables](#environment-variables)
-- [API Endpoints](#api-endpoints)
+- [Features](#Features)
+- [Tech Stack](#Tech-Stack)
+- [Prerequisites](#Prerequisites)
+- [Installation](#Installation)
+- [Usage](#Usage)
+- [Environment Variables](#Environment-variables)
+- [API Endpoints](#API-Endpoints)
 
 ## ✨ Features
 
@@ -21,7 +21,7 @@ A RESTful API built with **Node**, **Typescript**, **Express** and **MongoDB** f
 - Perform CRUD operations on Boards, Columns and Tasks
 - Add subtasks on Tasks, and mark subtask as completed
 
-## 🔧 Tech Stack
+## 🔧 Tech-Stack
 
 - **Node.js** - Runtime environment
 - **Express.js** - Web framework
@@ -37,47 +37,52 @@ A RESTful API built with **Node**, **Typescript**, **Express** and **MongoDB** f
 
 # 📦 Installation
 
+### Clone the repository
+
 ```bash
-# Clone the repository
 git clone https://github.com/zetmosoma10/kanbantasks-api.git
 cd kanbantasks-api
 ```
 
+### Install dependencies
+
 ```bash
-# Install dependencies
 npm install
 ```
 
+### Build the TypeScript code
+
 ```bash
-# Build the TypeScript code
 npm run build
 ```
 
 ## 🔑 Environment Variables
 
-PORT=your port
-NODE_ENV=your environment
-KANBAN_DB_CONN_STR=your database connection string
-KANBAN_JWT_SECRET=your jwt secret string
-KANBAN_EMAIL_HOST=your email host
-KANBAN_EMAIL_SERVICES=your email services
-KANBAN_EMAIL_USER=your email
-KANBAN_EMAIL_PORT=your email port
-KANBAN_EMAIL_PASS=your email password
-KANBAN_CLIENT=your frontend website url
-CLOUD_NAME=your cloudinary name
-CLOUD_API_KEY=your cloudinary api key
-CLOUD_API_SECRET=your cloudinary api secret
+- PORT=your port
+- NODE_ENV=your environment
+- KANBAN_DB_CONN_STR=your database connection string
+- KANBAN_JWT_SECRET=your jwt secret string
+- KANBAN_EMAIL_HOST=your email host
+- KANBAN_EMAIL_SERVICES=your email services
+- KANBAN_EMAIL_USER=your email
+- KANBAN_EMAIL_PORT=your email port
+- KANBAN_EMAIL_PASS=your email password
+- KANBAN_CLIENT=your frontend website url
+- CLOUD_NAME=your cloudinary name
+- CLOUD_API_KEY=your cloudinary api key
+- CLOUD_API_SECRET=your cloudinary api secret
 
 ## 🚀 Usage
 
+### Start dev server
+
 ```bash
-# Start dev server
 npm run dev
 ```
 
+### Build and run for production
+
 ```bash
-# Build and run for production
 npm run build
 npm start
 ```
