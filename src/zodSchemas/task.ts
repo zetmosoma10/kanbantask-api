@@ -1,5 +1,5 @@
 import z from "zod";
-import objectId from "../objectIdSchema";
+import objectId from "./objectIdSchema";
 
 const taskSchema = z.object({
   title: z
@@ -25,4 +25,13 @@ const taskSchema = z.object({
     .optional(),
 });
 
-export default taskSchema;
+const updateTaskSchema = taskSchema
+  .pick({
+    title: true,
+    description: true,
+    column: true,
+    subtasks: true,
+  })
+  .partial();
+
+export { taskSchema, updateTaskSchema };

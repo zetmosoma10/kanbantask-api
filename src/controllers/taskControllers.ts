@@ -1,9 +1,8 @@
 import { RequestHandler } from "express";
+import { updateTaskSchema, taskSchema } from "../zodSchemas/task";
 import Task from "../models/Task";
-import taskSchema from "../zodSchemas/task/taskSchema";
 import AppError from "../utils/AppError";
 import Column from "../models/Column";
-import updateTaskSchema from "../zodSchemas/task/updateTaskSchema";
 
 export const createTask: RequestHandler = async (req, res, next) => {
   try {

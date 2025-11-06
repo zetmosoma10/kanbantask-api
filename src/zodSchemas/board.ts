@@ -7,4 +7,4 @@ const boardSchema = z.object({
     .max(50, "name must not exceeds 50 characters."),
 });
 
-export default boardSchema;
+export { boardSchema };

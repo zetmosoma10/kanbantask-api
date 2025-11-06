@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
+import { columnSchema } from "../zodSchemas/column";
 import Column from "../models/Column";
-import columnSchema from "../zodSchemas/columnSchema";
 import AppError from "../utils/AppError";
 import mongoose from "mongoose";
 import Task from "../models/Task";
