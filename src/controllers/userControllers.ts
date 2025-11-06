@@ -8,8 +8,8 @@ import AppError from "../utils/AppError";
 import _ from "lodash";
 import getUserFields from "../utils/getUserFields";
 import mongoose from "mongoose";
-import deleteProfileSchema from "../zodSchemas/user/deleteProfileSchema";
 import cloudinary from "../configs/cloudinary";
+import { deleteProfileSchema } from "../zodSchemas/user";
 
 export const getLoggedInUser: RequestHandler = async (req, res, next) => {
   try {

@@ -65,6 +65,8 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+const jwtExp = env.KANBAN_JWT_EXP as "1d" | "2d" | "3d";
+
 // * GENERATE JWT
 userSchema.methods.generateJwt = function (): string {
   return jwt.sign(
@@ -75,7 +77,7 @@ userSchema.methods.generateJwt = function (): string {
     },
     env.KANBAN_JWT_SECRET!,
     {
-      expiresIn: "1d",
+      expiresIn: jwtExp,
     }
   );
 };

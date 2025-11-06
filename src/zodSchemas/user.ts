@@ -17,4 +17,15 @@ const userSchema = z.object({
   email: z.string().email().max(100, "email must not exceeds 100 characters"),
 });
 
-export default userSchema;
+const loginSchema = userSchema.pick({ email: true, password: true });
+const resetPasswordSchema = userSchema.pick({ password: true });
+const forgotPasswordSchema = userSchema.pick({ email: true });
+const deleteProfileSchema = userSchema.pick({ password: true });
+
+export {
+  userSchema,
+  loginSchema,
+  resetPasswordSchema,
+  forgotPasswordSchema,
+  deleteProfileSchema,
+};

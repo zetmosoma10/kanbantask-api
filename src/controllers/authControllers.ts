@@ -1,18 +1,20 @@
 import { RequestHandler } from "express";
 import mongoose from "mongoose";
 import User from "../models/User";
-import userSchema from "../zodSchemas/user/userSchema";
 import _ from "lodash";
-import loginSchema from "../zodSchemas/user/loginSchema";
 import AppError from "../utils/AppError";
-import forgotPasswordSchema from "../zodSchemas/user/forgotPasswordSchema";
 import emailTransporter from "../email/emailTransporter";
 import dayjs from "dayjs";
-import resetPasswordSchema from "../zodSchemas/user/resetPasswordSchema";
 import crypto from "node:crypto";
 import getUserFields from "../utils/getUserFields";
 import emailPasswordResetTemplate from "../email/emailPasswordResetTemplate";
 import emailPasswordSuccessTemplate from "../email/emailPasswordSuccessTemplate";
+import {
+  userSchema,
+  resetPasswordSchema,
+  forgotPasswordSchema,
+  loginSchema,
+} from "../zodSchemas/user";
 
 export const register: RequestHandler = async (req, res, next) => {
   try {
