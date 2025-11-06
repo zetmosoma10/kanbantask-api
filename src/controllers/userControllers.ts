@@ -9,7 +9,7 @@ import _ from "lodash";
 import getUserFields from "../utils/getUserFields";
 import mongoose from "mongoose";
 import cloudinary from "../configs/cloudinary";
-import { deleteProfileSchema } from "../zodSchemas/user";
+import { deleteProfileSchema } from "../validations/user";
 
 export const getLoggedInUser: RequestHandler = async (req, res, next) => {
   try {

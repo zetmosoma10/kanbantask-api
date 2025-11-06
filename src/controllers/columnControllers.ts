@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { columnSchema } from "../zodSchemas/column";
+import { columnSchema } from "../validations/column";
 import Column from "../models/Column";
 import AppError from "../utils/AppError";
 import mongoose from "mongoose";

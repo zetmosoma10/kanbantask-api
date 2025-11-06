@@ -14,7 +14,7 @@ import {
   resetPasswordSchema,
   forgotPasswordSchema,
   loginSchema,
-} from "../zodSchemas/user";
+} from "../validations/user";
 
 export const register: RequestHandler = async (req, res, next) => {
   try {

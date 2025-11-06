@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { boardSchema } from "../zodSchemas/board";
+import { boardSchema } from "../validations/board";
 import Board from "../models/Board";
 import AppError from "../utils/AppError";
 import mongoose from "mongoose";

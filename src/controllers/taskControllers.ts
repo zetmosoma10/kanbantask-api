@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { updateTaskSchema, taskSchema } from "../zodSchemas/task";
+import { updateTaskSchema, taskSchema } from "../validations/task";
 import Task from "../models/Task";
 import AppError from "../utils/AppError";
 import Column from "../models/Column";
