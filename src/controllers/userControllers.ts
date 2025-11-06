@@ -9,7 +9,7 @@ import _ from "lodash";
 import getUserFields from "../utils/getUserFields";
 import mongoose from "mongoose";
 import cloudinary from "../configs/cloudinary";
-import { deleteProfileSchema } from "../validations/user";
+import { deleteProfileSchema, updateMeSchema } from "../validations/user";
 
 export const getLoggedInUser: RequestHandler = async (req, res, next) => {
   try {
@@ -24,6 +24,40 @@ export const getLoggedInUser: RequestHandler = async (req, res, next) => {
     res.status(200).send({
       success: true,
       results: editedUser,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateMe: RequestHandler = async (req, res, next) => {
+  try {
+    if (req.body.password || req.body.isAdmin) {
+      next(
+        new AppError("Cannot update password or isAdmin in this endpoint", 400)
+      );
+      return;
+    }
+
+    const results = updateMeSchema.safeParse(req.body);
+    if (!results.success) {
+      next(new AppError("Invalid input(s)", 400, results.error.formErrors));
+      return;
+    }
+
+    const user = await User.findByIdAndUpdate(req.userId, results.data, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!user) {
+      next(new AppError("User not found", 404));
+      return;
+    }
+
+    res.status(200).send({
+      success: true,
+      results: user,
     });
   } catch (error) {
     next(error);
